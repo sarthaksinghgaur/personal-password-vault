@@ -39,6 +39,22 @@ Open `http://localhost:5173`.
 
 The Vite development server proxies `/api` requests to the backend.
 
+## Render deployment
+
+For the Render Static Site, add this environment variable and redeploy:
+
+```text
+VITE_API_URL=https://personal-password-vault.onrender.com
+```
+
+For the Render Web Service, set this environment variable and redeploy the backend:
+
+```text
+FRONTEND_URL=https://personal-password-vault-1.onrender.com
+```
+
+The frontend variable is read at build time. The backend variable controls credentialed CORS and must exactly match the deployed frontend origin, with no trailing slash.
+
 ## Security notes
 
 - The master password is used in the browser to derive the vault key and is never sent to the server.

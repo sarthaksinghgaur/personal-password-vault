@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { decrypt, deriveKey, encrypt } from '../utils/cryptoUtils';
+import { apiUrl } from '../utils/api';
 
 const VAULT_VERIFICATION_STRING = 'vault-verification-string';
 
@@ -63,7 +64,7 @@ function AuthForm({ onAuthSuccess }) {
         };
       }
 
-      const response = await fetch(`/api/auth/${isLogin ? 'login' : 'register'}`, {
+      const response = await fetch(apiUrl(`/api/auth/${isLogin ? 'login' : 'register'}`), {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -102,7 +103,7 @@ function AuthForm({ onAuthSuccess }) {
           throw new Error('Verification string mismatch');
         }
       } catch {
-        await fetch('/api/auth/logout', {
+        await fetch(apiUrl('/api/auth/logout'), {
           method: 'POST',
           credentials: 'include',
         }).catch(() => {});

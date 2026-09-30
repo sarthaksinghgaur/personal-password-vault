@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { decrypt } from '../utils/cryptoUtils';
+import { apiUrl } from '../utils/api';
 
 function CredentialCard({ credential, vaultKey, onStatusChange, onUnauthorized }) {
   const [decryptedPassword, setDecryptedPassword] = useState('');
@@ -68,7 +69,7 @@ function CredentialCard({ credential, vaultKey, onStatusChange, onUnauthorized }
     setIsUpdatingStatus(true);
 
     try {
-      const response = await fetch(`/api/credentials/${credential._id}/archive`, {
+      const response = await fetch(apiUrl(`/api/credentials/${credential._id}/archive`), {
         method: 'PATCH',
         credentials: 'include',
       });

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { encrypt } from '../utils/cryptoUtils';
+import { apiUrl } from '../utils/api';
 
 function CredentialForm({ vaultKey, onSaved, onUnauthorized }) {
   const [form, setForm] = useState({
@@ -29,7 +30,7 @@ function CredentialForm({ vaultKey, onSaved, onUnauthorized }) {
 
     try {
       const { ciphertext, iv } = await encrypt(form.password, vaultKey);
-      const response = await fetch('/api/credentials', {
+      const response = await fetch(apiUrl('/api/credentials'), {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

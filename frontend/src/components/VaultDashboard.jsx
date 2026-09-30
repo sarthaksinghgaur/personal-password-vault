@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import CredentialCard from './CredentialCard';
 import CredentialForm from './CredentialForm';
+import { apiUrl } from '../utils/api';
 
 function VaultDashboard({ vaultKey, onLogout }) {
   const [showArchived, setShowArchived] = useState(false);
@@ -22,7 +23,7 @@ function VaultDashboard({ vaultKey, onLogout }) {
 
       try {
         const response = await fetch(
-          `/api/credentials?archived=${showArchived}`,
+          apiUrl(`/api/credentials?archived=${showArchived}`),
           { credentials: 'include' }
         );
         const result = await response.json().catch(() => ({}));
@@ -60,7 +61,7 @@ function VaultDashboard({ vaultKey, onLogout }) {
 
   async function refreshCredentials() {
     const response = await fetch(
-      `/api/credentials?archived=${showArchived}`,
+      apiUrl(`/api/credentials?archived=${showArchived}`),
       { credentials: 'include' }
     );
     const result = await response.json().catch(() => ({}));
@@ -89,7 +90,7 @@ function VaultDashboard({ vaultKey, onLogout }) {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/logout', {
+      const response = await fetch(apiUrl('/api/auth/logout'), {
         method: 'POST',
         credentials: 'include',
       });
