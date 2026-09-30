@@ -18,6 +18,13 @@ const port = process.env.PORT || 5000;
 const mongoUri = process.env.MONGO_URI;
 const jwtSecret = process.env.JWT_SECRET;
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+const isSecureDeployment = frontendUrl.startsWith('https://');
+const authCookieOptions = {
+  httpOnly: true,
+  secure: isSecureDeployment,
+  sameSite: isSecureDeployment ? 'none' : 'lax',
+  maxAge: 60 * 60 * 1000,
+};
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -119,12 +126,7 @@ app.post('/api/auth/login', loginLimiter, async (req, res) => {
       expiresIn: '1h',
     });
 
-    res.cookie('authToken', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 1000,
-    });
+    res.cookie('authToken', token, authCookieOptions);
 
     res.json({
       user: {
@@ -140,11 +142,7 @@ app.post('/api/auth/login', loginLimiter, async (req, res) => {
 });
 
 app.post('/api/auth/logout', (req, res) => {
-  res.clearCookie('authToken', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  });
+  res.clearCookie('authToken', authCookieOptions);
   res.json({ message: 'Logged out successfully' });
 });
 
